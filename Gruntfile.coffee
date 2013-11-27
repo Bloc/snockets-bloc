@@ -1,44 +1,46 @@
 module.exports = (grunt) ->
-    grunt.initConfig
-        coffee:
-            compile:
-                expand: true
-                flatten: true
-                cwd: '.'
-                src: ['src/*.coffee']
-                dest: 'lib/'
-                ext: '.js'
+  grunt.initConfig
+    coffee:
+      compile:
+        expand: true
+        flatten: true
+        cwd: '.'
+        src: ['src/*.coffee']
+        dest: 'lib/'
+        ext: '.js'
 
-        docco:
-            compile:
-                src: ['src/*.coffee']
-                options:
-                    output: 'docs/'
+    docco:
+      compile:
+        src: ['src/*.coffee']
+        options:
+          output: 'docs/'
 
-        jasmine_node:
-            projectRoot: "."
-            requirejs: false
-            forceExit: true
-            extensions: 'coffee'
+    jasmine_node:
+      projectRoot: "."
+      requirejs: false
+      forceExit: true
+      extensions: 'coffee'
 
-        coffeelint:
-            app: ['src/*.coffee', 'Gruntfile.coffee']
-            options:
-                indentation:
-                    value: 4
-        watch:
-            main:
-                files: ['src/*.coffee']
-                tasks: ['coffee', 'jasmine_node']
+    coffeelint:
+      app: ['src/*.coffee', 'Gruntfile.coffee']
+      options:
+        indentation:
+          value: 2
+        max_line_length:
+          value: 200
+    watch:
+      main:
+        files: ['src/*.coffee']
+        tasks: ['coffee', 'jasmine_node']
 
-    grunt.loadNpmTasks 'grunt-jasmine-node'
-    grunt.loadNpmTasks 'grunt-contrib-coffee'
-    grunt.loadNpmTasks 'grunt-contrib-watch'
-    grunt.loadNpmTasks 'grunt-docco'
-    grunt.loadNpmTasks 'grunt-coffeelint'
-    grunt.loadNpmTasks 'grunt-bump'
+  grunt.loadNpmTasks 'grunt-jasmine-node'
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-docco'
+  grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-bump'
 
-    grunt.registerTask 'default',
-        ['coffeelint', 'coffee', 'jasmine_node', 'docco']
-    grunt.registerTask 'test',
-        ['coffee', 'jasmine_node']
+  grunt.registerTask 'default',
+    ['coffeelint', 'coffee', 'jasmine_node', 'docco']
+  grunt.registerTask 'test',
+    ['coffee', 'jasmine_node']
