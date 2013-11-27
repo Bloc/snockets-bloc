@@ -1,8 +1,6 @@
 
 # Snockets
 
-[![Build Status](https://travis-ci.org/pthrasher/snockets.png?branch=develop)](https://travis-ci.org/pthrasher/snockets)
-
 A JavaScript/CoffeeScript concatenation tool for Node.js inspired by [Sprockets](https://github.com/sstephenson/sprockets). Used by [connect-assets](http://github.com/TrevorBurnham/connect-assets) to create a Rails 3.1-style asset pipeline.
 
 Written in CoffeeScript by the author of [CoffeeScript: Accelerated JavaScript Development](http://pragprog.com/book/tbcoffee/coffeescript).
@@ -32,6 +30,7 @@ In your CoffeeScript files, write Sprockets-style comments to indicate dependenc
 
     #= require_tree dir
 
+
 ## Usage (Node-side)
 
 First,
@@ -41,28 +40,9 @@ First,
 Then in your app:
 
     Snockets = require 'snockets'
-    snockets = new Snockets()
+    snocket = new Snockets()
+    snocket.scan([filename])
+    dependentFiles = snocket.getChain()
 
-Each `Snockets` instance has a `depGraph` property, an instance of [dep-graph](https://github.com/TrevorBurnham/dep-graph). You can `scan` a file to just update the dependency graph:
+The `Snockets` constructor takes an `path_env` key in an optional hash, the value is an array of directory paths. This option provides the search path for required files.
 
-    snockets.scan 'dir/foo.coffee', (err, depGraph) -> ...
-
-To get a list of filenames showing the series of dependencies the scanned file has, you'd use `depGraph.getChain 'dir/foo.coffee'`.
-
-You can get a list of compiled JavaScripts corresponding to the dependency chain (starting from the first required file to the requested file) using `getCompiledChain`:
-
-    snockets.getCompiledChain 'dir/foo.coffee', (err, jsList) -> ...
-
-The result is in the format `[{filename: "dependency1.js", js: "// code"}, ...]`. Note that those JavaScript files are not actually created by `getCompiledChain`.
-
-Snockets can also provide a single compiled, concatenated file (optionally run through [UglifyJS](https://github.com/mishoo/UglifyJS) if the `minify` option is passed in):
-
-    snockets.getConcatenation 'dir/foo.coffee', minify: true, (err, js) -> ...
-
-Note that you don't need to `scan` before or after running `getCompiledChain` or `getConcatenation`; they update the dependency graph the same way that `scan` does.
-
-## Synchronous mode
-
-By default, Snockets uses only async file methods. You can pass the option `async: false` to either of its methods if you want it to be synchronous instead. In synchronous mode, you can use either callbacks or return values, e.g.
-
-    js = snockets.getConcatenation 'dir/foo.coffee', async: false
